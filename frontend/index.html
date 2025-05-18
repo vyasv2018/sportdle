@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SPORTDLE</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container responsive-container">
+    <h1 class="title">SPORTDLE</h1>
+
+    <div class="score-columns">
+      <div class="score-header">Elimination</div>
+      <div></div> <!-- Spacer for word grid -->
+      <div class="score-header">Information</div>
+    </div>
+
+    <div class="top-bar">
+      <div class="mode-selector">
+        <label for="mode">Mode:</label>
+        <select id="mode" onchange="changeMode()">
+          <option value="daily">Daily</option>
+          <option value="hourly">Hourly</option>
+          <option value="infinity" selected>Infinity</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="grid" class="grid"></div>
+
+    <!-- On-screen keyboard -->
+    <div id="keyboard" class="keyboard">
+      <div class="keyboard-row" id="row1"></div>
+      <div class="keyboard-row" id="row2"></div>
+      <div class="keyboard-row" id="row3"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
