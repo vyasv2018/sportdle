@@ -136,6 +136,11 @@ function getScoreMeterHTML(score) {
 }
 
 document.addEventListener("keydown", (e) => {
+  const hiddenInput = document.getElementById("hidden-input");
+
+  // Prevent double input if mobile keyboard is active
+  if (document.activeElement === hiddenInput) return;
+
   if (currentRow >= NUM_ROWS || isGameOver) return;
 
   const isLetter = /^[a-zA-Z]$/.test(e.key);
