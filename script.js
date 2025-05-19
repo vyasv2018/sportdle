@@ -9,6 +9,9 @@ let secretHash = "";
 const grid = document.getElementById("grid");
 const rowElements = [];
 
+// 👉 Replace this with your backend base URL!
+const BACKEND_BASE_URL = "https://sportdle-backend.onrender.com";
+
 function getStorageKey() {
   return `sportdle-${currentMode}`;
 }
@@ -105,7 +108,7 @@ function changeMode() {
   const mode = document.getElementById("mode").value;
   currentMode = mode;
 
-  fetch(`http://localhost:5000/start_game?mode=${mode}`)
+  fetch(`${BACKEND_BASE_URL}/start_game?mode=${mode}`)
     .then(res => res.json())
     .then(data => {
       secretHash = data.secretHash;
@@ -151,7 +154,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 function submitGuess(guess) {
-  fetch("http://localhost:5000/score", {
+  fetch(`${BACKEND_BASE_URL}/score`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ guess: guess })
@@ -202,7 +205,7 @@ function submitGuess(guess) {
 }
 
 function showEndMessage() {
-  fetch("http://localhost:5000/secret")
+  fetch(`${BACKEND_BASE_URL}/secret`)
     .then(res => res.json())
     .then(data => {
       alert(`❌ Game over. The word was: ${data.secret.toUpperCase()}`);
@@ -213,7 +216,7 @@ window.onload = () => {
   const selector = document.getElementById("mode");
   currentMode = selector ? selector.value : "infinity";
 
-  fetch(`http://localhost:5000/start_game?mode=${currentMode}`)
+  fetch(`${BACKEND_BASE_URL}/start_game?mode=${currentMode}`)
     .then(res => res.json())
     .then(data => {
       secretHash = data.secretHash;
