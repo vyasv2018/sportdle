@@ -218,7 +218,11 @@ function showEndMessage() {
 
 window.onload = () => {
   const selector = document.getElementById("mode");
-  currentMode = selector ? selector.value : "infinity";
+  currentMode = selector ? selector.value : "daily";
+
+  // Show/hide New Word button based on initial mode
+  const newWordBtn = document.getElementById("new-word-btn");
+  newWordBtn.style.display = (currentMode === "infinity") ? "inline-block" : "none";
 
   fetch(`${BACKEND_BASE_URL}/start_game?mode=${currentMode}`)
     .then(res => res.json())
@@ -230,6 +234,7 @@ window.onload = () => {
       renderKeyboard();
     });
 };
+
 
 function renderKeyboard() {
   const keyboard = document.getElementById("keyboard");
