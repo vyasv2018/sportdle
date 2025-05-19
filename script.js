@@ -107,6 +107,10 @@ function changeMode() {
   const mode = document.getElementById("mode").value;
   currentMode = mode;
 
+  // Show/hide "New Word" button based on mode
+  const newWordBtn = document.getElementById("new-word-btn");
+  newWordBtn.style.display = (mode === "infinity") ? "inline-block" : "none";
+
   fetch(`${BACKEND_BASE_URL}/start_game?mode=${mode}`)
     .then(res => res.json())
     .then(data => {
@@ -117,6 +121,7 @@ function changeMode() {
       loadProgress();
     });
 }
+
 
 function getScoreMeterHTML(score) {
   let color = "red";
@@ -293,4 +298,16 @@ function updateKeyboardColors(guess, feedback) {
       }
     }
   }
+}
+function startNewInfinityGame() {
+  if (currentMode !== "infinity") return;
+
+  fetch(`${BACKEND_BASE_URL}/start_game?mode=infinity`)
+    .then(res => res.json())
+    .then(data => {
+      secretHash = data.secretHash;
+      resetBoard();
+      resetKeyboardColors();
+      clearProgress();
+    });
 }

@@ -353,16 +353,17 @@ button {
 .keyboard-key {
   background-color: #302f2f;
   color: #fff;
-  padding: 12px 14px;
+  padding: 16px 18px;
   border-radius: 6px;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: bold;
   user-select: none;
   transition: background-color 0.3s ease, color 0.3s ease;
   text-align: center;
-  min-width: 36px;
+  min-width: 42px;
   flex: 1;
 }
+
 
 .keyboard-row {
   display: flex;
@@ -374,13 +375,9 @@ button {
 
 @media (max-width: 600px) {
   .keyboard-key {
-    padding: 10px 6px;
-    font-size: 1rem;
-    min-width: 28px;
-  }
-
-  .keyboard {
-    padding: 0 10px;
-    width: 100%;
+    padding: 12px 10px;
+    font-size: 1.2rem;
+    min-width: 36px;
   }
 }
+
