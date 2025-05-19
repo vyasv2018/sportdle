@@ -9,7 +9,6 @@ let secretHash = "";
 const grid = document.getElementById("grid");
 const rowElements = [];
 
-// 👉 Replace this with your backend base URL!
 const BACKEND_BASE_URL = "https://sportdle-backend.onrender.com";
 
 function getStorageKey() {
@@ -113,7 +112,7 @@ function changeMode() {
     .then(data => {
       secretHash = data.secretHash;
       resetBoard();
-      resetKeyboardColors(); // ✅ Clear key colors
+      resetKeyboardColors();
       clearProgress();
       loadProgress();
     });
@@ -221,10 +220,35 @@ window.onload = () => {
     .then(data => {
       secretHash = data.secretHash;
       resetBoard();
-      resetKeyboardColors();  // ✅ Reset keyboard on initial load too
+      resetKeyboardColors();
       loadProgress();
       renderKeyboard();
     });
+
+  // 📱 Mobile keyboard support
+  const hiddenInput = document.getElementById("hidden-input");
+
+  document.getElementById("grid").addEventListener("touchstart", () => {
+    hiddenInput.focus();
+  });
+
+  hiddenInput.addEventListener("input", (e) => {
+    const value = e.target.value;
+    if (value.length === 0) return;
+
+    const key = value[value.length - 1].toLowerCase();
+    hiddenInput.value = ""; // clear input for next char
+
+    const isLetter = /^[a-zA-Z]$/.test(key);
+    const row = rowElements[currentRow];
+
+    if (currentRow >= NUM_ROWS || isGameOver) return;
+
+    if (isLetter && currentGuess.length < NUM_COLS) {
+      currentGuess += key;
+      row.children[currentGuess.length - 1].textContent = key.toUpperCase();
+    }
+  });
 };
 
 function renderKeyboard() {
