@@ -107,11 +107,16 @@ function changeMode() {
   const mode = document.getElementById("mode").value;
   currentMode = mode;
 
-  // Show/hide "New Word" button based on mode
+  // Show or hide New Word button
   const newWordBtn = document.getElementById("new-word-btn");
   newWordBtn.style.display = (mode === "infinity") ? "inline-block" : "none";
 
-  fetch(`${BACKEND_BASE_URL}/start_game?mode=${mode}`)
+  // Get local date and hour
+  const now = new Date();
+  const localDate = now.toISOString().slice(0, 10);       // e.g., 2025-05-19
+  const localHour = now.toISOString().slice(0, 13);       // e.g., 2025-05-19T14
+
+  fetch(`${BACKEND_BASE_URL}/start_game?mode=${mode}&date=${localDate}&hour=${localHour}`)
     .then(res => res.json())
     .then(data => {
       secretHash = data.secretHash;
@@ -121,6 +126,7 @@ function changeMode() {
       loadProgress();
     });
 }
+
 
 
 function getScoreMeterHTML(score) {
@@ -305,9 +311,11 @@ function updateKeyboardColors(guess, feedback) {
   }
 }
 function startNewInfinityGame() {
-  if (currentMode !== "infinity") return;
+  const now = new Date();
+  const localDate = now.toISOString().slice(0, 10);
+  const localHour = now.toISOString().slice(0, 13);
 
-  fetch(`${BACKEND_BASE_URL}/start_game?mode=infinity`)
+  fetch(`${BACKEND_BASE_URL}/start_game?mode=infinity&date=${localDate}&hour=${localHour}`)
     .then(res => res.json())
     .then(data => {
       secretHash = data.secretHash;
@@ -316,3 +324,4 @@ function startNewInfinityGame() {
       clearProgress();
     });
 }
+

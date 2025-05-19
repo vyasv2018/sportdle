@@ -40,14 +40,16 @@ def start_game():
     state["known_positions"] = [None] * 5
     state["remaining_words"] = SOLUTIONS.copy()
 
-    if mode == "daily":
-        today = datetime.date.today().isoformat()
-        state["secret"] = pick_seeded_word("daily" + today)
-    elif mode == "hourly":
-        hour = datetime.datetime.now().strftime("%Y-%m-%d %H")
-        state["secret"] = pick_seeded_word("hourly" + hour)
+    user_date = request.args.get("date")   # e.g., "2025-05-19"
+    user_hour = request.args.get("hour")   # e.g., "2025-05-19T14"
+
+    if mode == "daily" and user_date:
+       state["secret"] = pick_seeded_word("daily" + user_date)
+    elif mode == "hourly" and user_hour:
+       state["secret"] = pick_seeded_word("hourly" + user_hour)
     else:
-        state["secret"] = random.choice(SOLUTIONS)
+       state["secret"] = random.choice(SOLUTIONS)
+
 
     return jsonify({
         "status": "ok",
