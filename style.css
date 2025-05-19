@@ -350,3 +350,37 @@ button {
     width: 55px;     /* shrink actual meter bar */
   }
 }
+.keyboard-key {
+  background-color: #302f2f;
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  user-select: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-align: center;
+  min-width: 36px;
+  flex: 1;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin: 4px 0;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .keyboard-key {
+    padding: 10px 6px;
+    font-size: 1rem;
+    min-width: 28px;
+  }
+
+  .keyboard {
+    padding: 0 10px;
+    width: 100%;
+  }
+}

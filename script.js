@@ -136,11 +136,6 @@ function getScoreMeterHTML(score) {
 }
 
 document.addEventListener("keydown", (e) => {
-  const hiddenInput = document.getElementById("hidden-input");
-
-  // Prevent double input if mobile keyboard is active
-  if (document.activeElement === hiddenInput) return;
-
   if (currentRow >= NUM_ROWS || isGameOver) return;
 
   const isLetter = /^[a-zA-Z]$/.test(e.key);
@@ -229,46 +224,6 @@ window.onload = () => {
       loadProgress();
       renderKeyboard();
     });
-
-  const hiddenInput = document.getElementById("hidden-input");
-
-  document.getElementById("grid").addEventListener("touchstart", () => {
-    hiddenInput.focus();
-  });
-
-  hiddenInput.addEventListener("input", (e) => {
-    const value = e.target.value;
-    if (value.length === 0) return;
-
-    const key = value[value.length - 1].toLowerCase();
-    hiddenInput.value = ""; // clear input for next char
-
-    const isLetter = /^[a-zA-Z]$/.test(key);
-    const row = rowElements[currentRow];
-
-    if (currentRow >= NUM_ROWS || isGameOver) return;
-
-    if (isLetter && currentGuess.length < NUM_COLS) {
-      currentGuess += key;
-      row.children[currentGuess.length - 1].textContent = key.toUpperCase();
-    }
-  });
-
-  hiddenInput.addEventListener("keydown", (e) => {
-    if (currentRow >= NUM_ROWS || isGameOver) return;
-    const row = rowElements[currentRow];
-
-    if (e.key === "Backspace" && currentGuess.length > 0) {
-      row.children[currentGuess.length - 1].textContent = "";
-      currentGuess = currentGuess.slice(0, -1);
-      e.preventDefault();
-    }
-
-    if (e.key === "Enter" && currentGuess.length === NUM_COLS) {
-      submitGuess(currentGuess);
-      e.preventDefault();
-    }
-  });
 };
 
 function renderKeyboard() {
@@ -278,7 +233,7 @@ function renderKeyboard() {
   const rows = [
     ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
     ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
-    ["Z", "X", "C", "V", "B", "N", "M"]
+    ["Enter", "Z", "X", "C", "V", "B", "N", "M", "Backspace"]
   ];
 
   for (const letters of rows) {
@@ -287,12 +242,31 @@ function renderKeyboard() {
 
     for (const letter of letters) {
       const key = document.createElement("span");
-      key.textContent = letter;
+      key.textContent = letter === "Backspace" ? "⌫" : (letter === "Enter" ? "⏎" : letter);
+      key.dataset.key = letter;
       key.id = `key-${letter}`;
+      key.classList.add("keyboard-key");
+      key.addEventListener("click", () => handleKeyClick(letter));
       rowDiv.appendChild(key);
     }
 
     keyboard.appendChild(rowDiv);
+  }
+}
+
+function handleKeyClick(key) {
+  if (isGameOver || currentRow >= NUM_ROWS) return;
+
+  const row = rowElements[currentRow];
+
+  if (/^[a-zA-Z]$/.test(key) && currentGuess.length < NUM_COLS) {
+    currentGuess += key.toLowerCase();
+    row.children[currentGuess.length - 1].textContent = key.toUpperCase();
+  } else if (key === "Backspace" && currentGuess.length > 0) {
+    row.children[currentGuess.length - 1].textContent = "";
+    currentGuess = currentGuess.slice(0, -1);
+  } else if (key === "Enter" && currentGuess.length === NUM_COLS) {
+    submitGuess(currentGuess);
   }
 }
 
