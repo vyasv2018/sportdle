@@ -230,7 +230,6 @@ window.onload = () => {
       renderKeyboard();
     });
 
-  // 📱 Mobile keyboard support
   const hiddenInput = document.getElementById("hidden-input");
 
   document.getElementById("grid").addEventListener("touchstart", () => {
@@ -252,6 +251,22 @@ window.onload = () => {
     if (isLetter && currentGuess.length < NUM_COLS) {
       currentGuess += key;
       row.children[currentGuess.length - 1].textContent = key.toUpperCase();
+    }
+  });
+
+  hiddenInput.addEventListener("keydown", (e) => {
+    if (currentRow >= NUM_ROWS || isGameOver) return;
+    const row = rowElements[currentRow];
+
+    if (e.key === "Backspace" && currentGuess.length > 0) {
+      row.children[currentGuess.length - 1].textContent = "";
+      currentGuess = currentGuess.slice(0, -1);
+      e.preventDefault();
+    }
+
+    if (e.key === "Enter" && currentGuess.length === NUM_COLS) {
+      submitGuess(currentGuess);
+      e.preventDefault();
     }
   });
 };
