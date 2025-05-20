@@ -105,6 +105,7 @@ function changeMode() {
   const mode = document.getElementById("mode").value;
   currentMode = mode;
 
+  // Show or hide New Word button
   const newWordBtn = document.getElementById("new-word-btn");
   newWordBtn.style.display = (mode === "infinity") ? "inline-block" : "none";
 
@@ -112,11 +113,11 @@ function changeMode() {
   const localDate = now.toISOString().slice(0, 10);
   const localHour = now.toISOString().slice(0, 13);
 
-  // Define a consistent seed based on mode + time
+  // Define consistent seed
   currentSeed =
     mode === "daily" ? `daily-${localDate}` :
     mode === "hourly" ? `hourly-${localHour}` :
-    Math.random().toString(36).slice(2); // random for infinity
+    Math.random().toString(36).slice(2); // new seed every time for infinity
 
   fetch(`${BACKEND_BASE_URL}/start_game?mode=${mode}&date=${localDate}&hour=${localHour}`)
     .then(res => res.json())
@@ -124,10 +125,14 @@ function changeMode() {
       secretHash = data.secretHash;
       resetBoard();
       resetKeyboardColors();
-      clearProgress();
-      loadProgress();
+
+      // 🔒 Only clear for infinity — retain progress for daily/hourly
+      if (mode === "infinity") clearProgress();
+
+      loadProgress();  // works because getStorageKey() includes seed
     });
 }
+
 
 function getScoreMeterHTML(score) {
   let color = "red";
